@@ -5,9 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
-    public GameObject cubePrefab;
-    public GameObject spherePrefab;
-    public GameObject prismPrefab;
+    public List<GameObject> shapePrefabs;
     public int instForce = 10;
 
     // Start is called before the first frame update
@@ -30,25 +28,12 @@ public class GameManager : MonoBehaviour
 
         if (Input.anyKeyDown && !IsMouseButtonClick())
         {
-            int randomInt = (int)Mathf.Ceil(Random.Range(0.1f, 3f));
+            int randomInt = (int)Mathf.Ceil(Random.Range(0.1f, 3f)) - 1;
             Vector3 instPos = new Vector3(0, 1, 0);
 
+            GameObject gameObject = Instantiate(shapePrefabs[randomInt], instPos, Quaternion.identity);
+            AddInstantiationForce(gameObject);
 
-
-            if (randomInt == 1)
-            {
-                GameObject cube = Instantiate(cubePrefab, instPos, Quaternion.identity);
-                AddInstantiationForce(cube);
-            } else if (randomInt == 2)
-            {
-                GameObject sphere = Instantiate(spherePrefab, instPos, Quaternion.identity);
-                AddInstantiationForce(sphere);
-            } else
-            {
-                GameObject prism = Instantiate(prismPrefab, instPos, Quaternion.identity);
-                AddInstantiationForce(prism);
-            }
-            
         }
         
     }

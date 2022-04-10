@@ -1059,6 +1059,10 @@ MonoBehaviour:
   cubePrefab: {fileID: 6245540902286219553, guid: fc9d3c0527e0989459dd6bb8f8d2704b, type: 3}
   spherePrefab: {fileID: 3948640838085009357, guid: 60df9393a4486954eb5b40c9d2d347e5, type: 3}
   prismPrefab: {fileID: 2253857695835147327, guid: 2c433912fac24f940a6edb7d88d3cc85, type: 3}
+  shapePrefabs:
+  - {fileID: 6245540902286219553, guid: fc9d3c0527e0989459dd6bb8f8d2704b, type: 3}
+  - {fileID: 2253857695835147327, guid: 2c433912fac24f940a6edb7d88d3cc85, type: 3}
+  - {fileID: 3948640838085009357, guid: 60df9393a4486954eb5b40c9d2d347e5, type: 3}
   instForce: 12
 --- !u!4 &2126468049
 Transform:
