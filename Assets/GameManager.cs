@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject cubePrefab;
     public GameObject spherePrefab;
+    public GameObject prismPrefab;
     public int instForce = 10;
 
     // Start is called before the first frame update
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.anyKeyDown && !IsMouseButtonClick())
         {
-            int randomInt = (int)Mathf.Ceil(Random.Range(0.1f, 2f));
+            int randomInt = (int)Mathf.Ceil(Random.Range(0.1f, 3f));
             Vector3 instPos = new Vector3(0, 1, 0);
 
             //todo-ck add code to never be zero
@@ -40,10 +41,14 @@ public class GameManager : MonoBehaviour
             {
                 GameObject cube = Instantiate(cubePrefab, instPos, Quaternion.identity);
                 cube.GetComponent<Rigidbody>().AddForce(randomX, instForce, randomZ, ForceMode.Impulse);
-            } else
+            } else if (randomInt == 2)
             {
                 GameObject sphere = Instantiate(spherePrefab, instPos, Quaternion.identity);
                 sphere.GetComponent<Rigidbody>().AddForce(randomX, instForce, randomZ, ForceMode.Impulse);
+            } else
+            {
+                GameObject prism = Instantiate(prismPrefab, instPos, Quaternion.identity);
+                prism.GetComponent<Rigidbody>().AddForce(randomX, instForce, randomZ, ForceMode.Impulse);
             }
             
         }
