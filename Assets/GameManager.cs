@@ -33,30 +33,44 @@ public class GameManager : MonoBehaviour
             int randomInt = (int)Mathf.Ceil(Random.Range(0.1f, 3f));
             Vector3 instPos = new Vector3(0, 1, 0);
 
-            //todo-ck add code to never be zero
-            float randomX = Random.Range(-2f, 2f);
-            float randomZ = Random.Range(-2f, 2f);
+
 
             if (randomInt == 1)
             {
                 GameObject cube = Instantiate(cubePrefab, instPos, Quaternion.identity);
-                cube.GetComponent<Rigidbody>().AddForce(randomX, instForce, randomZ, ForceMode.Impulse);
+                AddInstantiationForce(cube);
             } else if (randomInt == 2)
             {
                 GameObject sphere = Instantiate(spherePrefab, instPos, Quaternion.identity);
-                sphere.GetComponent<Rigidbody>().AddForce(randomX, instForce, randomZ, ForceMode.Impulse);
+                AddInstantiationForce(sphere);
             } else
             {
                 GameObject prism = Instantiate(prismPrefab, instPos, Quaternion.identity);
-                prism.GetComponent<Rigidbody>().AddForce(randomX, instForce, randomZ, ForceMode.Impulse);
+                AddInstantiationForce(prism);
             }
             
         }
         
     }
 
+    /// <summary>
+    /// Check if the input given is a mouse click.
+    /// </summary>
+    /// <returns>True if this is a mouse click.</returns>
     private bool IsMouseButtonClick()
     {
         return (Input.GetMouseButton(0) || Input.GetMouseButton(1) || Input.GetMouseButton(2));
+    }
+
+    /// <summary>
+    /// Add's an force at the moment of instantiation.
+    /// </summary>
+    /// <param name="gameObject">The Game Object to add the force to.</param>
+    private void AddInstantiationForce(GameObject gameObject)
+    {
+        //todo-ck add code to never be zero
+        float randomX = Random.Range(-2f, 2f);
+        float randomZ = Random.Range(-2f, 2f);
+        gameObject.GetComponent<Rigidbody>().AddForce(randomX, instForce, randomZ, ForceMode.Impulse);
     }
 }
