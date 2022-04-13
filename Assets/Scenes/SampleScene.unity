@@ -609,6 +609,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -681,6 +682,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 6.809, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1545d0bfc5e693c4a939649ea3909aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forceAmount: 500
 --- !u!1 &1110709202
 GameObject:
   m_ObjectHideFlags: 0
@@ -1056,9 +1070,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9309d0e3b219d3240ac32ff74ca55c51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubePrefab: {fileID: 6245540902286219553, guid: fc9d3c0527e0989459dd6bb8f8d2704b, type: 3}
-  spherePrefab: {fileID: 3948640838085009357, guid: 60df9393a4486954eb5b40c9d2d347e5, type: 3}
-  prismPrefab: {fileID: 2253857695835147327, guid: 2c433912fac24f940a6edb7d88d3cc85, type: 3}
   shapePrefabs:
   - {fileID: 6245540902286219553, guid: fc9d3c0527e0989459dd6bb8f8d2704b, type: 3}
   - {fileID: 2253857695835147327, guid: 2c433912fac24f940a6edb7d88d3cc85, type: 3}
