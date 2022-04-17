@@ -18,6 +18,7 @@ public class DragRigidbody : MonoBehaviour
     private float selectionDistance;
 
     private bool isMouseDown = false;
+    private bool throwObject = false;
     private int forwardZForce = 0;
     private int backwardZForce = 0;
 
@@ -48,6 +49,11 @@ public class DragRigidbody : MonoBehaviour
             selectedRigidbody = null;
             isMouseDown = false;
             resetOnMouseUp();
+        }
+
+        if (isMouseDown && Input.GetMouseButtonDown(1))
+        {
+            throwObject = true;
         }
 
         //Mouse ScrollWheel Input
@@ -82,22 +88,35 @@ public class DragRigidbody : MonoBehaviour
             Vector3 dragVectorForce = new Vector3(originalRigidbodyPosition.x+mousePositionOffset.x-selectedRigidbody.transform.position.x,
                 originalRigidbodyPosition.y + mousePositionOffset.y - selectedRigidbody.transform.position.y,
                 0);
-            selectedRigidbody.velocity = dragVectorForce * forceAmount * Time.deltaTime;
 
-            if (forwardZForce>0)
-            {
-                Vector3 zForce = new Vector3(0, 0, 1);
-                selectedRigidbody.AddForce(zForce * zForceAmount * Time.deltaTime, ForceMode.Impulse);
-                forwardZForce--;
-            }
-            if (backwardZForce>0)
-            {
-                Vector3 zForce = new Vector3(0, 0, -1);
-                selectedRigidbody.AddForce(zForce * zForceAmount * Time.deltaTime, ForceMode.Impulse);
-                backwardZForce--;
-            }
+                selectedRigidbody.velocity = dragVectorForce * forceAmount * Time.deltaTime;
+            
+
+
+
+            //if (forwardZForce>0)
+            //{
+            //    Vector3 zForce = new Vector3(0, 0, 1);
+            //    selectedRigidbody.AddForce(zForce * zForceAmount * Time.deltaTime, ForceMode.Impulse);
+            //    forwardZForce--;
+            //}
+            //if (backwardZForce>0)
+            //{
+            //    Vector3 zForce = new Vector3(0, 0, -1);
+            //    selectedRigidbody.AddForce(zForce * zForceAmount * Time.deltaTime, ForceMode.Impulse);
+            //    backwardZForce--;
+            //}
+
+   
 
             //Debug.DrawLine(originalRigidbodyPosition + mousePositionOffset, selectedRigidbody.transform.position, Color.red);
+        }
+
+        if (throwObject)
+        { 
+            selectedRigidbody.AddForce(new Vector3(0, 0, 1) * 500 * Time.deltaTime, ForceMode.Impulse);
+            throwObject = false;
+            selectedRigidbody = null;
         }
     }
 
