@@ -9,13 +9,17 @@ public class DragRigidbody : MonoBehaviour
      */
 
     public float forceAmount = 500;
+    public float zForceAmount = 1000;
 
     Rigidbody selectedRigidbody;
     Camera targetCamera;
-    Vector3 originalScreenTargetPosition;
-    Vector3 originalRigidbodyPosition;
-    float selectionDistance;
+    private Vector3 originalScreenTargetPosition;
+    private Vector3 originalRigidbodyPosition;
+    private float selectionDistance;
 
+    private bool isMouseDown = false;
+    private int forwardZForce = 0;
+    private int backwardZForce = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -35,13 +39,31 @@ public class DragRigidbody : MonoBehaviour
         {
             //Check if we are hovering over a Rigidbody, if so, select it
             selectedRigidbody = GetRigidBodyFromMouseClick();
+            isMouseDown = true;
         }
 
         if (Input.GetMouseButtonUp(0) && selectedRigidbody)
         {
             //Release selected Rigidbody if there is any
             selectedRigidbody = null;
+            isMouseDown = false;
+            resetOnMouseUp();
         }
+
+        //Mouse ScrollWheel Input
+        if (isMouseDown && Input.GetAxis("Mouse ScrollWheel") > 0f) //forward   
+        {
+            forwardZForce++;
+        } else if (isMouseDown && Input.GetAxis("Mouse ScrollWheel") < 0f) //backward
+        {
+            backwardZForce++;
+        }
+    }
+
+    private void resetOnMouseUp()
+    {
+        forwardZForce = 0;
+        backwardZForce = 0;
     }
 
     private void FixedUpdate()
@@ -49,9 +71,33 @@ public class DragRigidbody : MonoBehaviour
         //movement stuff here
         if (selectedRigidbody)
         {
-            Vector3 mousePositionOffset = 
-                targetCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, selectionDistance)) - originalScreenTargetPosition;
-            selectedRigidbody.velocity = (originalRigidbodyPosition + mousePositionOffset - selectedRigidbody.transform.position) * forceAmount * Time.deltaTime;
+            //Debug.Log(">>> 1 : " + selectionDistance);
+            //Debug.Log(">>> 2 : " + selectedRigidbody.position.z);
+
+            Vector3 mousePositionOffset =
+                targetCamera.ScreenToWorldPoint(
+                    new Vector3(Input.mousePosition.x, Input.mousePosition.y, selectionDistance)) - originalScreenTargetPosition;
+
+
+            Vector3 dragVectorForce = new Vector3(originalRigidbodyPosition.x+mousePositionOffset.x-selectedRigidbody.transform.position.x,
+                originalRigidbodyPosition.y + mousePositionOffset.y - selectedRigidbody.transform.position.y,
+                0);
+            selectedRigidbody.velocity = dragVectorForce * forceAmount * Time.deltaTime;
+
+            if (forwardZForce>0)
+            {
+                Vector3 zForce = new Vector3(0, 0, 1);
+                selectedRigidbody.AddForce(zForce * zForceAmount * Time.deltaTime, ForceMode.Impulse);
+                forwardZForce--;
+            }
+            if (backwardZForce>0)
+            {
+                Vector3 zForce = new Vector3(0, 0, -1);
+                selectedRigidbody.AddForce(zForce * zForceAmount * Time.deltaTime, ForceMode.Impulse);
+                backwardZForce--;
+            }
+
+            //Debug.DrawLine(originalRigidbodyPosition + mousePositionOffset, selectedRigidbody.transform.position, Color.red);
         }
     }
 
@@ -66,6 +112,8 @@ public class DragRigidbody : MonoBehaviour
             if (hitInfo.collider.gameObject.GetComponent<Rigidbody>())
             {
                 //todo-ck check tag of gameobject
+
+
                 selectionDistance = Vector3.Distance(ray.origin, hitInfo.point);
                 
                 originalScreenTargetPosition = targetCamera.ScreenToWorldPoint(
