@@ -8,8 +8,9 @@ public class DragRigidbody : MonoBehaviour
      * stolen from: https://sharpcoderblog.com/blog/drag-rigidbody-with-mouse-cursor-unity-3d-tutorial
      */
 
-    public float forceAmount = 500;
-    public float zForceAmount = 1000;
+    public float dragingForce = 500;
+    public float throwForce = 1000;
+    public float scrollwheelForce = 0.5f;
 
     Rigidbody selectedRigidbody;
     Camera targetCamera;
@@ -19,7 +20,7 @@ public class DragRigidbody : MonoBehaviour
 
     private bool isMouseDown = false;
     private bool throwObject = false;
-    private int forwardZForce = 0;
+    private float scrollWheelZOffset = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -58,16 +59,16 @@ public class DragRigidbody : MonoBehaviour
         //Mouse ScrollWheel Input
         if (isMouseDown && Input.GetAxis("Mouse ScrollWheel") > 0f) //forward   
         {
-            forwardZForce++;
+            scrollWheelZOffset = scrollWheelZOffset + scrollwheelForce;
         } else if (isMouseDown && Input.GetAxis("Mouse ScrollWheel") < 0f) //backward
         {
-            forwardZForce--;
+            scrollWheelZOffset = scrollWheelZOffset - scrollwheelForce;
         }
     }
 
     private void resetOnMouseUp()
     {
-        forwardZForce = 0;
+        scrollWheelZOffset = 0;
 
     }
 
@@ -88,10 +89,10 @@ public class DragRigidbody : MonoBehaviour
                 (
                 originalRigidbodyPosition.x + mousePositionOffset.x - selectedRigidbody.transform.position.x,
                 originalRigidbodyPosition.y + mousePositionOffset.y - selectedRigidbody.transform.position.y,
-                originalRigidbodyPosition.z + forwardZForce - selectedRigidbody.transform.position.z
+                originalRigidbodyPosition.z + scrollWheelZOffset - selectedRigidbody.transform.position.z
                 );
 
-            selectedRigidbody.velocity = dragVectorForce * forceAmount * Time.deltaTime;
+            selectedRigidbody.velocity = dragVectorForce * dragingForce * Time.deltaTime;
 
 
             //Debug.DrawLine(originalRigidbodyPosition + mousePositionOffset, selectedRigidbody.transform.position, Color.red);
@@ -99,7 +100,7 @@ public class DragRigidbody : MonoBehaviour
 
         if (throwObject)
         { 
-            selectedRigidbody.AddForce(new Vector3(0, 0, 1) * 500 * Time.deltaTime, ForceMode.Impulse);
+            selectedRigidbody.AddForce(new Vector3(0, 0, 1) * throwForce * Time.deltaTime, ForceMode.Impulse);
             throwObject = false;
             selectedRigidbody = null;
             resetOnMouseUp();
