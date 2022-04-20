@@ -84,29 +84,14 @@ public class DragRigidbody : MonoBehaviour
                     new Vector3(Input.mousePosition.x, Input.mousePosition.y, selectionDistance)) - originalScreenTargetPosition;
 
 
-            Vector3 dragVectorForce = new Vector3(
+            Vector3 dragVectorForce = new Vector3
+                (
                 originalRigidbodyPosition.x + mousePositionOffset.x - selectedRigidbody.transform.position.x,
                 originalRigidbodyPosition.y + mousePositionOffset.y - selectedRigidbody.transform.position.y,
-                originalRigidbodyPosition.z + forwardZForce - selectedRigidbody.transform.position.z);
+                originalRigidbodyPosition.z + forwardZForce - selectedRigidbody.transform.position.z
+                );
 
-                selectedRigidbody.velocity = dragVectorForce * forceAmount * Time.deltaTime;
-
-
-
-
-            //if (forwardZForce > 0)
-            //{
-            //    Vector3 zForce = new Vector3(0, 0, 1);
-            //    selectedRigidbody.AddForce(zForce * zForceAmount * Time.deltaTime, ForceMode.Impulse);
-            //    forwardZForce--;
-            //}
-            //if (backwardZForce > 0)
-            //{
-            //    Vector3 zForce = new Vector3(0, 0, -1);
-            //    selectedRigidbody.AddForce(zForce * zForceAmount * Time.deltaTime, ForceMode.Impulse);
-            //    backwardZForce--;
-            //}
-
+            selectedRigidbody.velocity = dragVectorForce * forceAmount * Time.deltaTime;
 
 
             //Debug.DrawLine(originalRigidbodyPosition + mousePositionOffset, selectedRigidbody.transform.position, Color.red);
