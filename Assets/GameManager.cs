@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public List<GameObject> shapePrefabs;
     public int instForce = 10;
 
+    private List<GameObject> createdObjects = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,8 +34,8 @@ public class GameManager : MonoBehaviour
             Vector3 instPos = new Vector3(0, 1, 0);
 
             GameObject gameObject = Instantiate(shapePrefabs[randomInt], instPos, Quaternion.identity);
+            createdObjects.Add(gameObject);
             AddInstantiationForce(gameObject);
-
         }
         
     }
