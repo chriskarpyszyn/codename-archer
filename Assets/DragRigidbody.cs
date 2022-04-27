@@ -22,10 +22,27 @@ public class DragRigidbody : MonoBehaviour
     private bool throwObject = false;
     private float scrollWheelZOffset = 0f;
 
+    private float sphereRadius = 3f;
+    private float maxDistance = 0.5f;
+    private GameObject currentHitObject;
+
+    private float zOffset = 0;
+
+    private Vector3 origin;
+    private Vector3 direction;
+    private float currentHitDistance;
+
     // Start is called before the first frame update
     void Start()
     {
         targetCamera = GetComponent<Camera>();
+
+        //code to ignore raycast
+        //todo-ck maybe pass objects by ref to ignore other objects as well
+        GameObject groundGameObject = GameObject.Find("Ground");
+        GameObject tubeGameObject = GameObject.Find("Cylinder");
+        groundGameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+        tubeGameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
     }
 
     // Update is called once per frame
@@ -59,6 +76,7 @@ public class DragRigidbody : MonoBehaviour
         //Mouse ScrollWheel Input
         if (isMouseDown && Input.GetAxis("Mouse ScrollWheel") > 0f) //forward   
         {
+            //scrollWheelZOffset += -scrollwheelForce * Mathf.Sign(Input.getAxis("Mouse ScrollWheel"))
             scrollWheelZOffset = scrollWheelZOffset + scrollwheelForce;
         } else if (isMouseDown && Input.GetAxis("Mouse ScrollWheel") < 0f) //backward
         {
@@ -69,6 +87,7 @@ public class DragRigidbody : MonoBehaviour
     private void resetOnMouseUp()
     {
         scrollWheelZOffset = 0;
+        zOffset = 0;
 
     }
 
@@ -80,22 +99,76 @@ public class DragRigidbody : MonoBehaviour
             //Debug.Log(">>> 1 : " + selectionDistance);
             //Debug.Log(">>> 2 : " + selectedRigidbody.position.z);
 
+
+            //ray cast part deux
+            /////////////////////////////////////
+            origin = selectedRigidbody.position;
+            direction = -transform.up;
+            RaycastHit hit;
+            if (Physics.SphereCast(origin, sphereRadius, direction, out hit, maxDistance))
+            {
+                currentHitObject = hit.transform.gameObject;
+                currentHitDistance = hit.distance;
+                zOffset = (currentHitObject.transform.position.z - selectedRigidbody.transform.position.z);
+            } else
+            {
+                currentHitDistance = maxDistance;
+                currentHitObject = null;
+                zOffset = 0;
+            }
+
+            //ray casting end
+            /////////////////////////////
+
             Vector3 mousePositionOffset =
                 targetCamera.ScreenToWorldPoint(
                     new Vector3(Input.mousePosition.x, Input.mousePosition.y, selectionDistance)) - originalScreenTargetPosition;
 
+            
+
+            //todo-ck tweak values
+            //todo-ck update var names
+            if (currentHitObject)
+            {
+                if (zOffset < 0 && zOffset > 0.1f)
+                {
+                    scrollWheelZOffset -= 0.0001f;
+                }
+                else if (zOffset < 0)
+                {
+                    scrollWheelZOffset -= 0.1f;
+                }
+                else if (zOffset > 0 && zOffset < 0.1f)
+                {
+                    scrollWheelZOffset += 0.0001f;
+                }
+                else if (zOffset > 0)
+                {
+                    scrollWheelZOffset += 0.1f;
+                }
+
+                Debug.DrawLine(currentHitObject.transform.position, selectedRigidbody.transform.position);
+            } else
+            {
+               
+            }
+            
 
             Vector3 dragVectorForce = new Vector3
                 (
-                originalRigidbodyPosition.x + mousePositionOffset.x - selectedRigidbody.transform.position.x,
-                originalRigidbodyPosition.y + mousePositionOffset.y - selectedRigidbody.transform.position.y,
+                originalRigidbodyPosition.x + mousePositionOffset.x  - selectedRigidbody.transform.position.x,
+                originalRigidbodyPosition.y + mousePositionOffset.y  - selectedRigidbody.transform.position.y,
                 originalRigidbodyPosition.z + scrollWheelZOffset - selectedRigidbody.transform.position.z
                 );
+
+
 
             selectedRigidbody.velocity = dragVectorForce * dragingForce * Time.deltaTime;
 
 
-            //Debug.DrawLine(originalRigidbodyPosition + mousePositionOffset, selectedRigidbody.transform.position, Color.red);
+            
+            Debug.Log("zoffset " + zOffset);
+
         }
 
         if (throwObject)
@@ -105,6 +178,19 @@ public class DragRigidbody : MonoBehaviour
             selectedRigidbody = null;
             resetOnMouseUp();
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (selectedRigidbody)
+        {
+            Gizmos.color = Color.red;
+            Debug.DrawLine(origin, origin + direction * currentHitDistance);
+            Gizmos.DrawWireSphere(origin + direction * currentHitDistance, sphereRadius);
+            //Debug.Log("Sphere Radius: " + sphereRadius);
+            
+        }
+        
     }
 
     private Rigidbody GetRigidBodyFromMouseClick()
