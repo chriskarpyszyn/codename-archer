@@ -61,13 +61,4 @@ public class GameManager : MonoBehaviour
         float randomZ = Random.Range(-2f, 2f);
         gameObject.GetComponent<Rigidbody>().AddForce(randomX, instForce, randomZ, ForceMode.Impulse);
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("test");
-        if (collision.gameObject.tag == "Stackable")
-        {
-            Debug.Log("Stacked!");
-        }
-    }
 }

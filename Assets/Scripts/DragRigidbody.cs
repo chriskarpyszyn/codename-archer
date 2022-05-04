@@ -102,6 +102,8 @@ public class DragRigidbody : MonoBehaviour
 
             //ray cast part deux
             /////////////////////////////////////
+            //todo-ck try Physics.OverlapSphere instead of Spherecast!
+            //https://docs.unity3d.com/ScriptReference/Physics.OverlapSphere.html
             origin = selectedRigidbody.position;
             direction = -transform.up;
             RaycastHit hit;

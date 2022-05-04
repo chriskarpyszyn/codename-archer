@@ -4,10 +4,30 @@ using UnityEngine;
 
 public class Stackable : MonoBehaviour
 {
-    List<GameObject> stackedObjects = new List<GameObject>();
-    private int count = 0;
-    public string countString;
+ 
+    private bool isStacked = false;
 
-    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Stackable")
+        {
+            if (!isStacked)
+            {
+                // if this is not stacked, then add to the ObjectStack list
+            }
+
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Stackable")
+        {
+            if (isStacked)
+            {
+                // if this is no longer stacked, remove from the object stack
+            }
+        }
+    }
 
 }
