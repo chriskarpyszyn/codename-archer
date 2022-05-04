@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public int instForce = 10;
 
     private List<GameObject> createdObjects = new List<GameObject>();
+    private List<Stackable> listOfStackedObjects = new List<Stackable>();
 
     // Start is called before the first frame update
     void Start()
@@ -59,5 +60,14 @@ public class GameManager : MonoBehaviour
         float randomX = Random.Range(-2f, 2f);
         float randomZ = Random.Range(-2f, 2f);
         gameObject.GetComponent<Rigidbody>().AddForce(randomX, instForce, randomZ, ForceMode.Impulse);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("test");
+        if (collision.gameObject.tag == "Stackable")
+        {
+            Debug.Log("Stacked!");
+        }
     }
 }

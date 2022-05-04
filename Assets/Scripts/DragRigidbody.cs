@@ -167,7 +167,7 @@ public class DragRigidbody : MonoBehaviour
 
 
             
-            Debug.Log("zoffset " + zOffset);
+            //Debug.Log("zoffset " + zOffset);
 
         }
 
