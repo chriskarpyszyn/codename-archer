@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public int instForce = 10;
 
     private List<GameObject> createdObjects = new List<GameObject>();
-    private List<Stackable> listOfStackedObjects = new List<Stackable>();
+    private List<ObjectStack> objectStackList = new List<ObjectStack>();
 
     // Start is called before the first frame update
     void Start()
@@ -60,5 +60,15 @@ public class GameManager : MonoBehaviour
         float randomX = Random.Range(-2f, 2f);
         float randomZ = Random.Range(-2f, 2f);
         gameObject.GetComponent<Rigidbody>().AddForce(randomX, instForce, randomZ, ForceMode.Impulse);
+    }
+
+    public void addToStackableList(ObjectStack objectStack)
+    {
+        objectStackList.Add(objectStack);
+    }
+
+    public void removeFromStackableList(ObjectStack objectStack)
+    {
+        objectStackList.Remove(objectStack);
     }
 }

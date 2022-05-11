@@ -4,15 +4,34 @@ using UnityEngine;
 
 public class ObjectStack : MonoBehaviour
 {
-    List<Object> stackedObjects = new List<Object>();
+    List<GameObject> stackedObjects = new List<GameObject>();
     private int count = 0;
     public string countString;
 
-    //todo- method to add objects to the stack list
+    public void addToStack(GameObject gameObject)
+    {
+        stackedObjects.Add(gameObject);
+        Debug.Log("Added!");
+        count++;
+    }
 
-    //todo- method to get the count of the stack in a string
+    public void removeFromStack(GameObject gameObject)
+    {
+        stackedObjects.Remove(gameObject);
+        Debug.Log("Removed!");
+        count--;
+    }
+
+    public int getCount()
+    {
+        return count;
+    }
 
     //todo- method to get the last object in the stack so we can draw a count over it
+    public GameObject getLastGameObject()
+    {
+        return stackedObjects[count - 1];
+    }
 
 
 }
