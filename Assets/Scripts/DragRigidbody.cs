@@ -22,8 +22,8 @@ public class DragRigidbody : MonoBehaviour
     private bool throwObject = false;
     private float scrollWheelZOffset = 0f;
 
-    private float sphereRadius = 3f;
-    private float maxDistance = 0.5f;
+    private float sphereRadius = 2f;
+    private float maxDistance = 1f;
     private GameObject currentHitObject;
 
     private float zOffset = 0;
@@ -126,27 +126,41 @@ public class DragRigidbody : MonoBehaviour
                 targetCamera.ScreenToWorldPoint(
                     new Vector3(Input.mousePosition.x, Input.mousePosition.y, selectionDistance)) - originalScreenTargetPosition;
 
-            
+
 
             //todo-ck tweak values
             //todo-ck update var names
+            
+
+            float maxSpeed = 0.1f;
+            float medSpeed = 0.00001f;
+            float minSpeed = 0.000001f;
+
             if (currentHitObject)
             {
-                if (zOffset < 0 && zOffset > 0.1f)
+                if (zOffset < 0 && zOffset > -0.05f)
                 {
-                    scrollWheelZOffset -= 0.0001f;
+                    scrollWheelZOffset -= minSpeed;
+                }
+                else if (zOffset < 0 && zOffset > -0.5f)
+                {
+                    scrollWheelZOffset -= medSpeed;
                 }
                 else if (zOffset < 0)
                 {
-                    scrollWheelZOffset -= 0.1f;
+                    scrollWheelZOffset -= maxSpeed;
                 }
-                else if (zOffset > 0 && zOffset < 0.1f)
+                else if (zOffset > 0 && zOffset < 0.05f)
                 {
-                    scrollWheelZOffset += 0.0001f;
+                    scrollWheelZOffset += minSpeed;
+                }
+                else if (zOffset > 0 && zOffset < 0.5f)
+                {
+                    scrollWheelZOffset += medSpeed;
                 }
                 else if (zOffset > 0)
                 {
-                    scrollWheelZOffset += 0.1f;
+                    scrollWheelZOffset += maxSpeed;
                 }
 
                 Debug.DrawLine(currentHitObject.transform.position, selectedRigidbody.transform.position);
